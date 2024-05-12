@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <link rel="stylesheet" href="login.css">
+  </head>
+  <body>
+  <a href="/" class="back-button">Вернуться</a>
+  <form action="/login" method="post">
+  <div>
+      <label>Логин:</label>
+      <input type="text" name="username"/>
+  </div>
+  <div>
+      <label>Пароль:</label>
+      <input type="password" name="password"/>
+  </div>
+  <% if (errorMessage) { %>
+    <div style="color: red;"><%= errorMessage %></div>
+  <% } %>
+  <input type="submit" value="Войти">
+  </form>
+</body>
+</html>
