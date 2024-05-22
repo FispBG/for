@@ -8,9 +8,13 @@ function getTokens() {
             tokensList.innerHTML = ''; // Очистка списка
             tokens.forEach(token => {
                 const listItem = document.createElement('li');
-                listItem.textContent = `Token ID: ${token.id}, Radius: ${token.radius}, Distance: ${token.distance}, E: ${token.E}`;
+                listItem.style.display = 'flex'; // Используем Flexbox для упорядочивания содержимого
+                listItem.style.justifyContent = 'space-between'; // Распределяем пространство между элементами
+                listItem.style.padding = '10px';
+                listItem.textContent = `Token ID: ${token.id}, Radius 1: ${token.radius1}, Radius 2: ${token.radius2}, Potencial 1: ${token.fi1},  Potencial 2: ${token.fi2}`;
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = 'Удалить';
+                deleteButton.style.marginLeft = 'auto';
                 deleteButton.onclick = () => deleteToken(token.id);
                 listItem.appendChild(deleteButton);
                 tokensList.appendChild(listItem);

@@ -3,6 +3,24 @@ import { FontLoader } from './FontLoader.js';
 import { TextGeometry } from './TextGeometry.js';
 import init from './init.js';
 
+
+
+let sessionData; // Объявляем переменную для хранения данных сессии
+
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/getSessionData')
+        .then(response => response.json())
+        .then(data => {
+            sessionData = data; // Сохраняем данные сессии в переменную
+            console.log(sessionData); // Выводим данные в консоль для проверки
+        })
+        .catch(error => {
+            console.error('Ошибка при получении данных сессии:', error);
+        });
+});
+
+
+
 const { sizes, scene, canvas, perspectiveCamera, orthographicCamera, renderer, controls_persp, controls_orth, raycaster } = init();
 
 
@@ -23,18 +41,18 @@ const table_height = 30;
 
 
 const config = {
-	'activeCamera': 'РїРµСЂСЃРїРµРєС‚РёРІРЅР°СЏ',
-	'camers': ['РїРµСЂСЃРїРµРєС‚РёРІРЅР°СЏ', 'РІРёРґ СЃРІРµСЂС…Сѓ'],
+	'activeCamera': 'перспективная',
+	'camers': ['перспективная', 'вид сверху'],
 	'magnetizm': false,
 }
 
 const dict_camera = {
-	'РїРµСЂСЃРїРµРєС‚РёРІРЅР°СЏ': {
+	'перспективная': {
 		camera: perspectiveCamera,
 		position: new THREE.Vector3(0, 30, 0),
 		rotation: new THREE.Vector3(0, 0, 0),
 	},
-	'РІРёРґ СЃРІРµСЂС…Сѓ': {
+	'вид сверху': {
 		camera: orthographicCamera,
 		position: new THREE.Vector3(0, 30, 0),
 		rotation: new THREE.Vector3(0, 0, 0),
@@ -42,11 +60,11 @@ const dict_camera = {
 }
 
 const dict_controls = {
-	'РїРµСЂСЃРїРµРєС‚РёРІРЅР°СЏ': {
+	'перспективная': {
 		controls: controls_persp,
 		enabled: true,
 	},
-	'РІРёРґ СЃРІРµСЂС…Сѓ': {
+	'вид сверху': {
 		controls: controls_orth,
 		enabled: false,
 	},
@@ -64,11 +82,14 @@ controls_orth.enabled = false;
 const divForm = document.createElement('div');
 divForm.className = "formDiv";
 
+const divBtn = document.createElement('div');
+divBtn.className = "divBtn";
+
 const settingsForm = document.createElement('form');
 settingsForm.name = "setingsForm";
 
 const pSelect = document.createElement("p");
-pSelect.textContent = "РљР°РјРµСЂР°: "
+pSelect.textContent = "Камера: "
 
 const cameraSelect = document.createElement("select");
 cameraSelect.name = "cameraSelect";
@@ -85,7 +106,8 @@ for (let i = 0; i < config.camers.length; i++) {
 
 document.body.appendChild(divForm);
 divForm.appendChild(settingsForm);
-settingsForm.appendChild(pSelect);
+settingsForm.appendChild(divBtn)
+divBtn.appendChild(pSelect);
 pSelect.appendChild(cameraSelect);
 
 cameraSelect.addEventListener("change", () => {
@@ -99,9 +121,9 @@ checkBoxMagnet.type = "checkbox";
 checkBoxMagnet.id = "magnet";
 
 const pCheckBox = document.createElement("p");
-pCheckBox.textContent = "РњР°РіРЅРёС‚РЅС‹Р№ РєСѓСЂСЃРѕСЂ: "
+pCheckBox.textContent = "Магнитный курсор: "
 
-settingsForm.appendChild(pCheckBox);
+divBtn.appendChild(pCheckBox);
 pCheckBox.appendChild(checkBoxMagnet);
 
 checkBoxMagnet.addEventListener("change", () => {
@@ -110,11 +132,20 @@ checkBoxMagnet.addEventListener("change", () => {
 
 
 /** Paragraph */
+const divPotential = document.createElement('div');
+divPotential.className = "divPotential";
+
 const paragraphPotential = document.createElement('p');
 paragraphPotential.id = "potential";
-paragraphPotential.textContent = `X : ${0}\nY : ${0}\nPotential : ${"HUINYA"}`;
+paragraphPotential.textContent = `X : ${0}\nY : ${0}\nPotential : ${"INFO"}`;
 
-settingsForm.appendChild(paragraphPotential);
+const potentialOn = document.createElement('p');
+potentialOn.id = "potentialOn";
+potentialOn.textContent = `Потанциал на: `;
+
+settingsForm.appendChild(divPotential);
+divPotential.appendChild(paragraphPotential);
+divPotential.appendChild(potentialOn);
 
 /** Making PLANE */
 const plane_geometry = new THREE.PlaneGeometry(table_width, table_height);
@@ -255,12 +286,12 @@ const tick = () => {
 };
 
 const calculation_koef = 2;
-const field = initMatrix(table_width, table_height, [electrod1, electrod2], [0.01, 12.92], calculation_koef);
+const field = initMatrix(table_width, table_height, [electrod1, electrod2], [-10, 10], calculation_koef);
 console.log(field);
 
 tick();
 
-/** Р‘Р°Р·РѕРІС‹Рµ РѕР±РїР°Р±РѕС‚С‡РёРєРё СЃРѕР±С‹С‚РёР№ РґР»С‹ РїРѕРґРґРµСЂР¶РєРё СЂРµСЃР°Р№Р·Р° */
+/** Базовые обпаботчики событий длы поддержки ресайза */
 canvas.addEventListener('resize', updateSizeAfterResize);
 
 canvas.addEventListener('mousemove', (event) => {
@@ -269,7 +300,7 @@ canvas.addEventListener('mousemove', (event) => {
 	pointer.x = ( (event.clientX - offsetLeft) / canvas.clientWidth ) * 2 - 1;
 	pointer.y = - ( (event.clientY - offsetTop) / canvas.clientHeight ) * 2 + 1;
 
-	if (config.activeCamera === 'РІРёРґ СЃРІРµСЂС…Сѓ') {
+	if (config.activeCamera === 'вид сверху') {
 		raycaster.setFromCamera(pointer, activeCamera);
 		const intersects = raycaster.intersectObjects([table, checkMesh]);
 
@@ -308,7 +339,7 @@ canvas.addEventListener('dblclick', () => {
 
 canvas.addEventListener("mousedown", (event) => {
 	if (event.button === 0){
-		if (config.activeCamera === 'РІРёРґ СЃРІРµСЂС…Сѓ' && cursor_point.material.visible) {
+		if (config.activeCamera === 'вид сверху' && cursor_point.material.visible) {
 			const geometry_measuring_point = new THREE.SphereGeometry(cursor_point.geometry.parameters.radius);
 			const material_measuring_point = new THREE.MeshBasicMaterial({
 				color: 0xffcc33,
@@ -320,7 +351,7 @@ canvas.addEventListener("mousedown", (event) => {
 			measuring_point.position.z = cursor_point.position.z;
 		}
 	} else if (event.button === 2){
-		if (config.activeCamera === 'РІРёРґ СЃРІРµСЂС…Сѓ'){
+		if (config.activeCamera === 'вид сверху'){
 			raycaster.setFromCamera(pointer, activeCamera);
 			const intersects = raycaster.intersectObjects(group_measuring_points.children);
 			for (let i = 0; i < intersects.length; i++) {
@@ -360,7 +391,7 @@ function changeControls() {
 };
 
 function updateSizeAfterResize() {
-	// РћР±РЅРѕРІР»СЏРµРј СЂР°Р·РјРµСЂС‹
+	// Обновляем размеры
 	sizes.width = canvas.clientWidth;
 	sizes.height = canvas.clientHeight;
 
@@ -371,11 +402,11 @@ function updateSizeAfterResize() {
 	orthographicCamera.bottom = -height_camera / 2;
 	orthographicCamera.top = height_camera / 2;
 
-	// РћР±РЅРѕРІР»СЏРµРј СЃРѕРѕС‚РЅРѕС€РµРЅРёРµ СЃС‚РѕСЂРѕРЅ РєР°РјРµСЂС‹
+	// Обновляем соотношение сторон камеры
 	activeCamera.aspect = sizes.width / sizes.height;
 	activeCamera.updateProjectionMatrix();
 
-	// РћР±РЅРѕРІР»СЏРµРј renderer
+	// Обновляем renderer
 	renderer.setSize(sizes.width, sizes.height);
 	renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 	renderer.render(scene, activeCamera);

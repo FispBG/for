@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Token Input</title>
+    <title>Вход студента</title>
     <link rel="stylesheet" href="token.css">
+    <link rel="icon" type="image/x-icon" href="icon-for-a-website-for-a-physics-laboratory-electr.png">
 </head>
 <body>
     <a href="/" class="back-button">Вернуться</a>
@@ -13,6 +14,9 @@
                 <input type="text" name="token" placeholder="Введите токен" required>
                 <button type="submit">Отправить</button>
             </div>
+            <% if (errorMessage) { %>
+                <div style="color: red;"><%= errorMessage %></div>
+            <% } %>
         </form>
     </div>
 </body>

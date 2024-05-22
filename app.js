@@ -29,6 +29,11 @@ app.use(session({
     cookie: { secure: false } // Установка флага Secure в false для локального тестирования
 }));
 
+function getRandomInt(min, max) {
+    min = Math.ceil(min); // Ensure min is rounded up to nearest integer
+    max = Math.floor(max); // Ensure max is rounded down to nearest integer
+    return Math.floor(Math.random() * (max - min + 1)) + min; // Generate random integer between min and max
+}
 
 async function checkUser(userType, usernameOrToken, password) {
     return new Promise((resolve, reject) => {
@@ -53,7 +58,10 @@ async function checkUser(userType, usernameOrToken, password) {
             const tokenRef = db.collection('tokenUsers').doc(usernameOrToken);
             tokenRef.get().then(doc => {
                 if (doc.exists) {
-                    resolve({ success: true, user: { username: usernameOrToken, userType: 'user' } });
+                    // Извлекаем дополнительные данные из документа
+                    const userData = doc.data();
+                    // Добавляем дополнительные данные в объект, который передаем в resolve
+                    resolve({ success: true, user: { username: usernameOrToken, userType: 'user',...userData } });
                 } else {
                     resolve({ success: false, message: 'Недействительный токен.' });
                 }
@@ -66,12 +74,6 @@ async function checkUser(userType, usernameOrToken, password) {
         }
     });
 }
-
-
-
-
-
-
 
 function checkAdmin(req, res, next) {
     // console.log(req.session.user,req.session.user.userType);
@@ -112,27 +114,29 @@ app.get('/admin', checkAdmin, (req, res) => {
         res.redirect('/login');
     }
 });
-
 app.post('/createToken', async (req, res) => {
-    const { radius, distance, E } = req.body;
+    const { radius1, radius2, fi1, fi2 } = req.body;
 
-    // Генерация уникального имени для документа
-    const docName = 'doc_' + new Date().getTime();
+    // Generating a unique name for the document
+    const docName = getRandomInt(10000000, 100000000).toString(); // Convert the number to a string
 
-    // Добавление документа в Firestore
+    // Adding the document to Firestore
     try {
         await db.collection('tokenUsers').doc(docName).set({
-            radius: radius,
-            distance: distance,
-            E: E
+            radius1: radius1,
+            radius2: radius2,
+            fi1: fi1,
+            fi2: fi2
         });
-        // Отправляем ответ с кодом статуса 200 и сообщением об успехе
-        res.status(200);
+
+        // Перенаправление на /admin после успешного создания документа
+        res.redirect('/admin');
     } catch (error) {
         console.error("Error creating document: ", error);
         res.status(500).send("Error creating document");
     }
 });
+
 
 // Настройка парсера тела запроса
 
@@ -159,7 +163,8 @@ app.post('/login', async (req, res) => {
 
 
 app.get('/token', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'token.html'));
+    const errorMessage = req.session.errorMessage || '';
+    res.render('token', { errorMessage });
 });
 
 app.post('/token', async (req, res) => {
@@ -169,9 +174,12 @@ app.post('/token', async (req, res) => {
         req.session.user = result.user;
         res.redirect('/laba');
     } else {
-        res.status(401).send(result.message); // Send a 401 Unauthorized status code with a message
+        req.session.errorMessage = result.message;
+        // Используем статус 401 для индикации неавторизованного доступа
+        res.status(401).render('token', { errorMessage: result.message });
     }
 });
+
 
 app.get('/laba', checkAdmin, (req, res) => {
     console.log(req.session.user);
@@ -179,6 +187,16 @@ app.get('/laba', checkAdmin, (req, res) => {
         res.sendFile(path.join(__dirname, 'public', 'laba.html'));
     } else {
         res.redirect('/token');
+    }
+});
+
+app.get('/getSessionData', (req, res) => {
+    if (req.session.user) {
+        // Отправляем данные пользователя
+        res.json(req.session.user);
+    } else {
+        // Отправляем пустой ответ, если сессия не установлена
+        res.json({});
     }
 });
 

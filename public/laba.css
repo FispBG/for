@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(125, 194, 255);
+    background-color: rgb(186, 186, 186);
 }
 
 #threejs-window {
@@ -17,7 +17,13 @@ canvas {
 }
 
 .container {
-    display: flex; /* Используем flexbox для расположения div рядом */
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.containerSecond{
+    display: flex;
 }
 
 .title {
@@ -43,6 +49,9 @@ canvas {
     overflow: scroll;
     scrollbar-width: none;
     margin-right: 20px ;
+    font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: 18px;
+    font-weight: 400;
 }
 
 /* CSS */
@@ -56,13 +65,12 @@ canvas {
     cursor: pointer;
     display: inline-block;
     font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 24px;
+    font-weight: 800;
     line-height: normal;
     min-height: 60px;
     min-width: 0;
     outline: none;
-    padding: 16px 24px;
     text-align: center;
     text-decoration: none;
     transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
@@ -72,6 +80,7 @@ canvas {
     width: 21vw;
     will-change: transform;
     margin-right: 2%;
+    margin-bottom: 10px;
 }
 
 .button:disabled {
@@ -93,7 +102,7 @@ canvas {
 #window{
     width: 72.5vw;
     max-width: 72.5vw;/* Ширина окна */
-    height: 5vh; /* Высота окна */
+    height: 8vh; /* Высота окна */
     position: relative; /* Позиционирование окна */
     border: 1px solid black; /* Граница окна */
     overflow: hidden; /* Скрытие содержимого, выходящего за границы окна */
@@ -159,4 +168,17 @@ canvas {
     height: 5vh;
     will-change: transform;
     margin-right: 2%;
+}
+
+form{
+    display: flex;
+    padding-left:1%;
+    font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.divBtn{
+    padding-right: 100px;
+    align-items: center;
 }

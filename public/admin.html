@@ -4,18 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="admin.css">
-    <title>Firebase Firestore Form</title>
+    <title>Панель администратора</title>
+    <link rel="icon" type="image/x-icon" href="icon-for-a-website-for-a-physics-laboratory-electr.png">
 </head>
 <body>
     <form action="/createToken" method="post">
-        <label for="radius">Радиус:</label>
-        <input type="number" id="radius" name="radius" required>
+        <label for="radius">Радиус 1:</label>
+        <input type="number" id="radius1" name="radius1" required>
         <br>
-        <label for="distance">Расстояние:</label>
-        <input type="number" id="distance" name="distance" required>
+        <label for="distance">Радиус 2:</label>
+        <input type="number" id="radius2" name="radius2" required>
         <br>
-        <label for="E">E:</label>
-        <input type="number" id="E" name="E" required>
+        <label for="E">Потенциал 1:</label>
+        <input type="number" id="fi1" name="fi1" required>
+        <br>
+        <label for="E">Потенциал 2:</label>
+        <input type="number" id="fi2" name="fi2" required>
         <br>
         <form id="createTokenForm" action="/createToken" method="post">
             <!-- form fields -->
