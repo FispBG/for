@@ -182,3 +182,10 @@ form{
     padding-right: 100px;
     align-items: center;
 }
+
+.info1 {
+    margin-right: 20px;
+    padding-right: 20px;
+    padding-left: 20px; /* Измените значение на желаемое расстояние */
+    /* Измените значение на желаемое расстояние */
+}

@@ -9,24 +9,24 @@
 </head>
 <body>
     <form action="/createToken" method="post">
-        <label for="radius">Радиус 1:</label>
-        <input type="number" id="radius1" name="radius1" required>
-        <br>
-        <label for="distance">Радиус 2:</label>
-        <input type="number" id="radius2" name="radius2" required>
-        <br>
-        <label for="E">Потенциал 1:</label>
-        <input type="number" id="fi1" name="fi1" required>
-        <br>
-        <label for="E">Потенциал 2:</label>
-        <input type="number" id="fi2" name="fi2" required>
-        <br>
-        <form id="createTokenForm" action="/createToken" method="post">
-            <!-- form fields -->
-            <script src="admin.js"></script> 
-            <button type="submit">Создать токен</button>
-        </form>
+    <label for="radius1">Радиус 1:</label>
+    <input type="number" id="radius1" name="radius1" min="0" max="80" step="any" required>
+    <br>
+    <label for="radius2">Радиус 2:</label>
+    <input type="number" id="radius2" name="radius2" min="0" max="80" step="any" required>
+    <br>
+    <label for="E">Потенциал 1:</label>
+    <input type="number" id="fi1" name="fi1" step="any" required>
+    <br>
+    <label for="E">Потенциал 2:</label>
+    <input type="number" id="fi2" name="fi2" step="any" required>
+    <br>
+    <form id="createTokenForm" action="/createToken" method="post">
+        <!-- form fields -->
+        <script src="admin.js"></script> 
+        <button type="submit">Создать токен</button>
     </form>
+</form>
     
     
     <h2>Tokens List</h2>

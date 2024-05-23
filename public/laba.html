@@ -18,11 +18,43 @@
             <canvas id="threejs-canvas"></canvas>
             <script type="module" src="laba.js"></script> 
         </div>
+        <script>
+            function downloadAllParagraphsAsTxt() {
+                const dataDiv = document.getElementById("dataText");
+                let content = "";
+                dataDiv.querySelectorAll("p").forEach(function(p) {
+                    content += p.textContent + "\n\n";
+                });
+                const blob = new Blob([content], {type: "text/plain;charset=utf-8"});
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = "download_all_paragraphs.txt";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+            
+            document.addEventListener("DOMContentLoaded", function() {
+                const button = document.createElement("button");
+                button.innerText = "Скачать txt";
+                button.onclick = downloadAllParagraphsAsTxt;
+                button.style.display = "block";
+                button.style.width = "100%";
+                button.style.backgroundColor = "#ff0000";
+                button.style.color = "white";
+                button.style.border = "none";
+                button.style.cursor = "pointer";
+                button.style.padding = "10px 0";
+                button.style.fontSize = "16px";
+                button.style.marginTop = "20px";
+                document.getElementById("dataText").appendChild(button);
+            });
+            </script>
         <div id="dataText">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+            <p></p>
         </div>
     </div>
-
     <!-- Всплывающее окно -->
     <div id="modal" class="modal">
         <div class="modal-content">

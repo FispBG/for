@@ -142,8 +142,8 @@ app.post('/createToken', async (req, res) => {
 
 // Маршрут для отображения формы логина
 app.get('/login', (req, res) => {
-    const errorMessage = req.session.errorMessage || '';
-    res.render('login', { errorMessage });
+    const loginErrorMessage = req.session.loginErrorMessage || '';
+    res.render('login', { errorMessage: loginErrorMessage });
 });
 
 
@@ -156,17 +156,19 @@ app.post('/login', async (req, res) => {
         res.redirect('/admin');
     } else {
         // Redirect back to the login page with an error message
-        req.session.errorMessage = result.message;
+        req.session.loginErrorMessage = result.message;
         res.redirect('/login');
     }
 });
 
 
+// Маршрут для отображения формы ввода токена
 app.get('/token', (req, res) => {
-    const errorMessage = req.session.errorMessage || '';
-    res.render('token', { errorMessage });
+    const tokenErrorMessage = req.session.tokenErrorMessage || '';
+    res.render('token', { errorMessage: tokenErrorMessage });
 });
 
+// Маршрут для обработки формы ввода токена
 app.post('/token', async (req, res) => {
     const { token } = req.body;
     const result = await checkUser('user', token, null);
@@ -174,7 +176,7 @@ app.post('/token', async (req, res) => {
         req.session.user = result.user;
         res.redirect('/laba');
     } else {
-        req.session.errorMessage = result.message;
+        req.session.tokenErrorMessage = result.message;
         // Используем статус 401 для индикации неавторизованного доступа
         res.status(401).render('token', { errorMessage: result.message });
     }
