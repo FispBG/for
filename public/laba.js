@@ -198,11 +198,11 @@ divinf2.className = "info2";
 
 const fi1 = document.createElement('p'); // Создаем элемент fi1
 fi1.id = "fi1"; // Устанавливаем id для элемента fi1
-fi1.textContent = `Потенциал левого: `; // Добавляем текст к элементу fi1
+fi1.textContent = `Напряжение левого: `; // Добавляем текст к элементу fi1
 
 const fi2 = document.createElement('p'); // Создаем элемент fi2
 fi2.id = "fi2"; // Устанавливаем id для элемента fi2
-fi2.textContent = `Потенциал правого: `; 
+fi2.textContent = `Напряжение правого: `; 
 
 
 settingsForm.appendChild(divPotential);
