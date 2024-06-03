@@ -221,7 +221,7 @@ app.get('/', (req, res) => {
 
 app.use(express.static('public'));
 // Запуск сервера
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4040;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
