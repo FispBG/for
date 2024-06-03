@@ -5,6 +5,7 @@ const path = require('path');
 
 const app = express();
 var admin = require("firebase-admin");
+app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
 // Указываем Express, где искать шаблоны
@@ -219,7 +220,7 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.use(express.static('public'));
+
 // Запуск сервера
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "My webpack project",
   "main": "app.js",
+  "homepage": "./",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
